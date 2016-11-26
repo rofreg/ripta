@@ -1,0 +1,30 @@
+<div>
+  Finding your location...
+</div>
+
+<form method="POST" id="location_data">
+  <input id="latitude" name="latitude" type="hidden">
+  <input id="longitude" name="longitude" type="hidden">
+</form>
+
+<script type="text/javascript">
+  function initGeolocation(){
+    if (navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(success, fail);
+    } else {
+       alert("Sorry, your browser does not support geolocation services.");
+    }
+  }
+
+  function success(position){
+    document.getElementById('latitude').value = position.coords.latitude;
+    document.getElementById('longitude').value = position.coords.longitude;
+    document.getElementById('location_data').submit();
+  }
+
+  function fail(){
+    alert("Sorry, something went wrong trying to find your location.")
+  }
+
+  initGeolocation()
+</script>

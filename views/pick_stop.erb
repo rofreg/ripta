@@ -1,0 +1,9 @@
+Pick a stop:
+
+<ul>
+  <% @stops.sort_by(&:name).each do |stop| %>
+    <li>
+      <a href="/stops/<%= stop.id %>"><%= stop.name %></a>
+    </li>
+  <% end %>
+</ul>

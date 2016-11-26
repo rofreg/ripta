@@ -1,0 +1,24 @@
+<style>
+  li.live{
+    font-weight: bold;
+  }
+  li.past{
+    color: #999;
+  }
+</style>
+
+<h2><%= @stop.name %></h2>
+<ul>
+  <% @stop_times.each do |stop_time| %>
+    <li class="<%= "live" if stop_time.live? %> <%= "past" if stop_time.departure_time < Time.now + 60 %>">
+      <strong><%= stop_time.scheduled_departure_time.strftime("%l:%M%P") %></strong>:
+      [<%= stop_time.trip.route.short_name %>]
+      <%= stop_time.trip.headsign %>
+
+      <% if stop_time.live? %>
+        <br>
+        Projected arrival time: <%= stop_time.actual_arrival_time.strftime("%l:%M%P") %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
