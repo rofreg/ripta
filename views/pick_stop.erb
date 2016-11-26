@@ -3,7 +3,7 @@ Pick a stop:
 <% if @close_stops.any? %>
   <h2>Very nearby:</h2>
   <ul>
-    <% @close_stops.sort_by(&:name).each do |stop| %>
+    <% @close_stops.each do |stop| %>
       <li>
         <a href="/stops/<%= stop.id %>"><%= stop.name %></a>
       </li>
