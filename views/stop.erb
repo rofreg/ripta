@@ -19,7 +19,7 @@
 
       <% if stop_time.live? %>
         <br>
-        Projected arrival time: <%= stop_time.actual_arrival_time.strftime("%l:%M%P") %>
+        Projected time: <%= (stop_time.actual_arrival_time || stop_time.actual_departure_time).strftime("%l:%M%P") %>
       <% end %>
     </li>
   <% end %>
