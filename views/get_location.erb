@@ -1,5 +1,7 @@
-<div>
+<div id="loading">
   Finding your location...
+  <img src="/images/loading.gif" title="Loading...">
+  <a href="/stops">or view all stops</a>
 </div>
 
 <form method="POST" id="location_data">
@@ -10,9 +12,9 @@
 <script type="text/javascript">
   function initGeolocation(){
     if (navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(success, fail);
+      navigator.geolocation.getCurrentPosition(success, failure);
     } else {
-       alert("Sorry, your browser does not support geolocation services.");
+      failure();
     }
   }
 
@@ -22,9 +24,12 @@
     document.getElementById('location_data').submit();
   }
 
-  function fail(){
-    alert("Sorry, something went wrong trying to find your location.")
+  function failure(){
+    window.location = "/stops?geolocation=false";
   }
 
   initGeolocation()
+
+  // If we fail to get a coordinate after 10s, redirect
+  setTimeout(failure, 10000);
 </script>

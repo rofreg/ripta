@@ -7,4 +7,4 @@ gem 'thin'
 gem 'rerun'
 
 gem 'json'
-gem 'gtfs-realtime'
+gem 'gtfs-realtime', git: 'https://github.com/rofreg/gtfs-realtime.git', branch: 'master'

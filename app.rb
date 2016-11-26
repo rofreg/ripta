@@ -13,19 +13,36 @@ end
 # Refresh GTFS Realtime data every 10 seconds
 Thread.new do
   loop do
-    GTFS::Realtime.refresh_realtime_feed!
     sleep 10
+    GTFS::Realtime.refresh_realtime_feed!
   end
 end
 
 get '/' do
-  # send_file File.expand_path('index.html', settings.public_folder)
   erb :get_location, layout: :default
 end
 
 post '/' do
-  @stops = GTFS::Realtime::Stop.nearby(params["latitude"].to_f, params["longitude"].to_f)
+  # find nearby stops
+  latitude, longitude = params["latitude"].to_f, params["longitude"].to_f
+  @stops = GTFS::Realtime::Stop.nearby(latitude, longitude)
+
+  # find VERY nearby stops
+  @close_stops = @stops.select{|s| s.distance(latitude, longitude) < 0.005}.sort_by{|s| s.distance(latitude, longitude)}
+
+  # if the closest stop is RIGHT nearby, auto-choose it
+  if @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0005
+    redirect to("/stops/#{@close_stops.first.id}")
+  end
+
   erb :pick_stop, layout: :default
+end
+
+get '/stops' do
+  @stops = GTFS::Realtime::Stop.all
+  @geolocation = params["geolocation"]
+
+  erb :all_stops, layout: :default
 end
 
 get '/stops/:id' do

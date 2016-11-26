@@ -1,2 +1,45 @@
-<h1>RIPTA Realtime</h1>
-<%= yield %>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>RIPTA Realtime</title>
+    <meta name="description" content="Realtime status updates on the RIPTA bus system.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/">
+          <img src="/images/ripta.png" title="RIPTA"> Realtime
+        </a>
+      </h1>
+    </header>
+
+    <% if @stop %>
+      <header class="secondary">
+        <h3>
+          <%= @stop.name %>
+          <a href="/stops">[change]</a>
+        </h3>
+      </header>
+    <% end %>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <!-- TODO: change UA-XXXXX-Y to a real Google Analytics ID. -->
+    <script>
+        window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+        ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+    </script>
+    <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+  </body>
+</html>

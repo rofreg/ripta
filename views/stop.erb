@@ -3,11 +3,13 @@
     font-weight: bold;
   }
   li.past{
+    display: none;
     color: #999;
   }
 </style>
 
-<h2><%= @stop.name %></h2>
+<h2>Upcoming buses</h2>
+
 <ul>
   <% @stop_times.each do |stop_time| %>
     <li class="<%= "live" if stop_time.live? %> <%= "past" if stop_time.departure_time < Time.now + 60 %>">
