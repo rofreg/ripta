@@ -1,5 +1,8 @@
 # to run: rerun -- rackup
 
+require 'dotenv'
+Dotenv.load
+
 require 'sinatra'
 
 GTFS::Realtime.configure do |config|
@@ -7,7 +10,7 @@ GTFS::Realtime.configure do |config|
   config.trip_updates_feed = "http://realtime.ripta.com:81/api/tripupdates"
   config.vehicle_positions_feed = "http://realtime.ripta.com:81/api/vehiclepositions"
   config.service_alerts_feed = "http://realtime.ripta.com:81/api/servicealerts"
-  config.database_path = "sqlite://database.db"
+  config.database_path = ENV["DATABASE_PATH"]
 end
 
 # Refresh GTFS Realtime data every 10 seconds

@@ -7,3 +7,5 @@
 /pkg
 /doc/api
 database.db
+.env
+.bundle/config
