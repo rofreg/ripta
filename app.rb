@@ -1,7 +1,7 @@
 require_relative 'init'
-
 require 'sinatra'
 
+# Require SSL in production, so that geolocation works in Chrome
 if ENV['RACK_ENV'] == 'production'
   require 'rack/ssl'
   use Rack::SSL
