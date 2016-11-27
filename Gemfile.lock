@@ -45,6 +45,8 @@ GEM
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
+    rack-ssl (1.4.1)
+      rack
     rake (11.3.0)
     rb-fsevent (0.9.7)
     rb-inotify (0.9.7)
@@ -77,6 +79,7 @@ DEPENDENCIES
   gtfs-realtime!
   json
   pg
+  rack-ssl
   rerun
   sinatra
   sqlite3

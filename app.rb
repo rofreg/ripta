@@ -5,6 +5,11 @@ Dotenv.load
 
 require 'sinatra'
 
+if ENV['RACK_ENV'] == 'production'
+  require 'rack/ssl'
+  use Rack::SSL
+end
+
 GTFS::Realtime.configure do |config|
   config.static_feed = "http://www.ripta.com/googledata/current/google_transit.zip"
   config.trip_updates_feed = "http://realtime.ripta.com:81/api/tripupdates"
