@@ -3,7 +3,6 @@
     font-weight: bold;
   }
   tr.past{
-    display: none;
     color: #999;
   }
   div.original_schedule{
@@ -15,42 +14,48 @@
 
 <h2>Upcoming buses</h2>
 
-<table>
-  <tr>
-    <th>ETA</th>
-    <th>Route</th>
-  </tr>
-  <% @stop_times.each do |stop_time| %>
-    <tr class="<%= "live" if stop_time.live? %> <%= "past" if stop_time.departure_time < Time.now + 60 %>">
-      <td class="time">
-        <% if stop_time.departure_time - Time.now <= 60 %>
-          Arriving now
-        <% elsif stop_time.departure_time - Time.now <= 90 %>
-          1 minute away
-        <% elsif stop_time.departure_time - Time.now <= 600 %>
-          <%= ((stop_time.departure_time - Time.now) / 60).round %> minutes away
-        <% else %>
-          <%= stop_time.departure_time.strftime("%l:%M%P") %>
-        <% end %>
-      </td>
-      <td>
-        Route <%= stop_time.trip.route.short_name %> to
-        <%= stop_time.trip.headsign %>
-
-        <% if stop_time.live? && stop_time.departure_time != stop_time.scheduled_departure_time %>
-          <div class="original_schedule">
-            Originally scheduled for <%= stop_time.scheduled_departure_time.strftime("%l:%M%P") %>,
-            <% delay = stop_time.actual_departure_delay || stop_time.actual_arrival_delay %>
-            <% if delay > 0 %>
-              <%= delay / 60 %> minutes late
-            <% elsif delay < 0 %>
-              <%= delay / 60 %> minutes early
-            <% else %>
-              on time
-            <% end %>
-          </div>
-        <% end %>
-      </td>
+<% if @stop_times.none? %>
+  Sorry, it looks like there are no more buses at this stop today.
+<% else %>
+  <table>
+    <tr>
+      <th>ETA</th>
+      <th>Route</th>
     </tr>
-  <% end %>
-</table>
+    <% @stop_times.each do |stop_time| %>
+      <tr class="<%= "live" if stop_time.live? %> <%= "past" if stop_time.departure_time < Time.now - 30 %>">
+        <td class="time">
+          <% if stop_time.departure_time - Time.now <= -30 %>
+            Departed
+          <% elsif stop_time.departure_time - Time.now <= 30 %>
+            Arriving now
+          <% elsif stop_time.departure_time - Time.now <= 90 %>
+            1 minute away
+          <% elsif stop_time.departure_time - Time.now <= 600 %>
+            <%= ((stop_time.departure_time - Time.now) / 60).round %> minutes away
+          <% else %>
+            <%= stop_time.departure_time.strftime("%l:%M%P") %>
+          <% end %>
+        </td>
+        <td>
+          Route <%= stop_time.trip.route.short_name %> to
+          <%= stop_time.trip.headsign %>
+
+          <% if stop_time.live? && stop_time.departure_time != stop_time.scheduled_departure_time %>
+            <div class="original_schedule">
+              Originally scheduled for <%= stop_time.scheduled_departure_time.strftime("%l:%M%P") %>;
+              <% delay = stop_time.actual_departure_delay || stop_time.actual_arrival_delay %>
+              <% if delay > 0 %>
+                <%= delay / 60 %> minutes late
+              <% elsif delay < 0 %>
+                <%= delay.abs / 60 %> minutes early
+              <% else %>
+                on time
+              <% end %>
+            </div>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>

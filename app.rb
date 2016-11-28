@@ -45,5 +45,17 @@ end
 get '/stops/:id' do
   @stop = GTFS::Realtime::Stop[params[:id]]
   @stop_times = @stop.stop_times_for_today
+
+  # Only show upcoming buses, not past ones
+  @stop_times = @stop_times.select do |stop_time|
+    scheduled_time = stop_time.scheduled_departure_time || stop_time.scheduled_arrival_time
+    actual_time = stop_time.actual_departure_time || stop_time.actual_arrival_time
+
+    scheduled_time > Time.now - 120 || (actual_time && actual_time > Time.now - 120)
+  end
+
+  # TODO: update gem to handle case where bus arrives + leaves early
+  # right now, the bus re-appears on the schedule at that point :|
+
   erb :stop, layout: :default
 end
