@@ -24,8 +24,9 @@
           <% end %>
         </td>
         <td>
-          Route <%= stop_time.trip.route.short_name %> to
-          <%= stop_time.trip.headsign %>
+          <a href="<%= stop_time.trip.route.url %>">Route <%= stop_time.trip.route.short_name %></a>
+          to
+          <a href="/trips/<%= stop_time.trip.id %>"><%= stop_time.trip.headsign %></a>
 
           <% if stop_time.live? && stop_time.departure_time != stop_time.scheduled_departure_time %>
             <div class="original_schedule">

@@ -59,3 +59,16 @@ get '/stops/:id' do
 
   erb :stop, layout: :default
 end
+
+get '/stops/:id/map' do
+  @stop = GTFS::Realtime::Stop.find(params[:id])
+
+  erb :map, layout: :default
+end
+
+get '/trips/:id' do
+  @trip = GTFS::Realtime::Trip.find(params[:id])
+  @vehicle_position = GTFS::Realtime::VehiclePosition.where(trip_id: @trip.id).first
+
+  erb :trip, layout: :default
+end

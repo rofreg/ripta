@@ -1,0 +1,21 @@
+<h2>Map</h2>
+<div id="map">
+  TODO
+</div>
+
+<script type="text/javascript">
+  // Try to find our current location, so we can show it on the map
+  function initGeolocation(){
+    if (navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(success, null);
+    } else {
+      failure();
+    }
+  }
+
+  function success(position){
+    // TODO: show our current location on the map
+  }
+
+  initGeolocation();
+</script>
