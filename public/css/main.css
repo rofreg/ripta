@@ -29,12 +29,12 @@ header h1 a{
 header h3{
   font-size: 16px;
   font-weight: bold;
-  padding: 3px 10px 2px;
+  padding: 5px 10px 4px;
 }
 
 header h3 a{
   color: #70aab3;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: normal;
 }
 
