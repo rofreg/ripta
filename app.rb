@@ -1,5 +1,6 @@
 require_relative 'init'
 require 'rack/ssl' if Sinatra::Base.production?
+require 'rollbar/middleware/sinatra'
 
 # Refresh GTFS Realtime data every 10 seconds
 Thread.new do
