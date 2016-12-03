@@ -68,6 +68,9 @@ get '/stops/:id' do
   # TODO: update gem to handle case where bus arrives + leaves early
   # right now, the bus re-appears on the schedule at that point :|
 
+  # refresh the page every 30 seconds
+  @refresh_interval = 30
+
   erb :stop, layout: :default
 end
 

@@ -8,5 +8,6 @@ TODO
 /pkg
 /doc/api
 database.db
+database.db-journal
 .env
 .bundle/config
