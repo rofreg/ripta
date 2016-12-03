@@ -1,5 +1,6 @@
 require_relative 'init'
 require 'sinatra'
+require "sinatra/multi_route"
 
 # Require SSL in production, so that geolocation works in Chrome
 if ENV['RACK_ENV'] == 'production'
@@ -19,16 +20,26 @@ get '/' do
   erb :get_location, layout: :default
 end
 
-post '/' do
-  # find nearby stops
-  latitude, longitude = params["latitude"].to_f, params["longitude"].to_f
+route :get, :post, ['/nearby', '/stops/:id/nearby'] do
+  if params[:id]
+    # find nearby stops based on stop id
+    @stop = GTFS::Realtime::Stop.find(params[:id])
+    latitude, longitude = @stop.latitude, @stop.longitude
+  elsif params[:latitude]
+    # find nearby stops based on submitted location
+    latitude, longitude = params[:latitude].to_f, params[:longitude].to_f
+    autodetect_stop = true
+  else
+    redirect to("/")
+  end
+
   @stops = GTFS::Realtime::Stop.nearby(latitude, longitude)
 
   # find VERY nearby stops
   @close_stops = @stops.select{|s| s.distance(latitude, longitude) < 0.002}.sort_by{|s| s.distance(latitude, longitude)}
 
   # if the closest stop is RIGHT nearby, auto-choose it
-  if @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0001
+  if autodetect_stop && @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0001
     redirect to("/stops/#{@close_stops.first.id}")
   end
 
