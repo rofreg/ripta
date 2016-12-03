@@ -91,3 +91,21 @@ table td, table th{
 table th{
   background: #eee;
 }
+
+tr.live td.time{
+  font-weight: bold;
+}
+
+tr.past{
+  color: #777;
+}
+
+td div.original_schedule{
+  font-size: 14px;
+  margin-top: 2px;
+  color: #999;
+}
+
+td a {
+  color: #063753;
+}
