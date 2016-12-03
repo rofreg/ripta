@@ -47,8 +47,10 @@
   </table>
 <% end %>
 
-<% if [72175, 16400, 16435, 16485, 16555, 72155, 16475, 16525, 16590, 16630, 16585, 72160, 16720, 72165, 72170].include? @stop.id.to_i
-  # this is a list of all stop ids in Kennedy Plaza 
-  %>
-  <br>Kennedy Plaza Stop Guide: <br><img src="/images/kennedy_plaza_stops.jpg" width=400 style="padding-top: 5px"><br>
+<% if [72175, 16400, 16435, 16485, 16555, 72155, 16475, 16525, 16590, 16630, 16585, 72160, 16720, 72165, 72170].include?(@stop.id.to_i) %>
+  <br>
+  <div>
+    <h4>Kennedy Plaza stop guide</h4>
+    <a href="<%= image_path "kennedy_plaza_stops_large.jpg" %>"><img src="<%= image_path "kennedy_plaza_stops.jpg" %>"></a>
+  </div>
 <% end %>

@@ -1,16 +1,24 @@
 require_relative 'init'
 require 'rack/ssl' if Sinatra::Base.production?
+require 'rollbar/middleware/sinatra'
 
 # Refresh GTFS Realtime data every 10 seconds
 Thread.new do
   loop do
-    sleep 10
-    GTFS::Realtime.refresh_realtime_feed!
+    begin
+      sleep 10
+      GTFS::Realtime.refresh_realtime_feed!
+    rescue StandardError => e
+      # keep trying, even in the event of an error
+      # but let us know about the issue
+      Rollbar.error(e)
+    end
   end
 end
 
 class RiptaApp < Sinatra::Application
   use Rack::SSL if Sinatra::Base.production?
+  use Rollbar::Middleware::Sinatra
   register Sinatra::MultiRoute
 
   configure do
