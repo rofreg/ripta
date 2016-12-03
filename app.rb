@@ -73,8 +73,8 @@ end
 
 get '/stops/:id/map' do
   @stop = GTFS::Realtime::Stop.find(params[:id])
-
-  erb :map, layout: :default
+  redirect to('http://www.google.com/maps/place/'+@stop.latitude.to_s+','+@stop.longitude.to_s)
+  #erb :map, layout: :default
 end
 
 get '/trips/:id' do
