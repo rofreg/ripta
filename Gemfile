@@ -5,6 +5,8 @@ ruby '2.3.2'
 gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'thin'
+gem 'sprockets'
+gem 'sprockets-helpers'
 gem 'rerun'
 
 gem 'dotenv'
