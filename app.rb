@@ -43,7 +43,7 @@ get '/stops' do
 end
 
 get '/stops/:id' do
-  @stop = GTFS::Realtime::Stop[params[:id]]
+  @stop = GTFS::Realtime::Stop.find(params[:id])
   @stop_times = @stop.stop_times_for_today
 
   # Only show upcoming buses, not past ones
