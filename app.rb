@@ -25,10 +25,10 @@ post '/' do
   @stops = GTFS::Realtime::Stop.nearby(latitude, longitude)
 
   # find VERY nearby stops
-  @close_stops = @stops.select{|s| s.distance(latitude, longitude) < 0.005}.sort_by{|s| s.distance(latitude, longitude)}
+  @close_stops = @stops.select{|s| s.distance(latitude, longitude) < 0.002}.sort_by{|s| s.distance(latitude, longitude)}
 
   # if the closest stop is RIGHT nearby, auto-choose it
-  if @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0005
+  if @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0001
     redirect to("/stops/#{@close_stops.first.id}")
   end
 
