@@ -1,7 +1,64 @@
-<h2>Trip</h2>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>	
 
-<%= @trip.headsign %>
+<style>
+#mapid { height: 400px; width: 600px;}
+</style>
 
-<br>
-Vehicle position?
-<%= !!@vehicle_position %>
+<h2><%= @trip.route_id %> to <%= @trip.headsign %></h2>
+
+
+
+<% @shape = @trip.shapes.ordered %>
+
+<% @stops = @trip.stops %>
+
+<div id="mapid"></div>
+
+<script>
+	var busIcon = L.icon({
+	    iconUrl: '/images/bus_marker_small.png',
+	    
+
+	    iconSize:     [50, 71], // size of the icon
+	    iconAnchor:   [24, 71], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [24, 100]	 // point from which the popup should open relative to the iconAnchor
+	});
+
+	var mymap = new L.Map('mapid');
+
+	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+	var osm = new L.TileLayer(osmUrl, {minZoom: 8, maxZoom: 19, attribution: osmAttrib});
+
+	
+	mymap.setView(new L.LatLng(41.825017, -71.411064),9);	
+	mymap.addLayer(osm);
+
+	var marker = L.marker([<%= @vehicle_position.latitude %>, <%= @vehicle_position.longitude %>], {icon: busIcon}).addTo(mymap);
+
+	path = []
+	<% @shape.each do |s| %>
+		path.push (L.latLng(<%= s.latitude %>, <%= s.longitude %>));
+	<% end %>
+
+	stops = []
+	<% @stops.each do |s| %>
+		stops.push (L.latLng(<%= s.latitude %>, <%= s.longitude %>))
+	<% end %>
+
+	for (i = 0; i < stops.length; i++) {
+		//var marker = L.marker(stops[i]).addTo(mymap);
+		var circle = L.circle(stops[i], {
+    		color: 'red',
+    		fillColor: '#f03',
+    		fillOpacity: 0.7,
+    		radius: 80
+		}).addTo(mymap);
+	}
+
+	var polyline = L.polyline(path, {color: 'red'}).addTo(mymap);
+	mymap.fitBounds(path);
+	mymap.setZoomAround(mymap.getCenter(), mymap.getZoom());
+
+</script>
