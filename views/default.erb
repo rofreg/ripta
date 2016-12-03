@@ -27,7 +27,9 @@
       <header class="secondary">
         <h3>
           <%= @stop.name %>
-          <a href="/stops">[change]</a>
+          <a href="/stops/<%= @stop.id %>/map">[map]</a>
+          <a href="/stops/<%= @stop.id %>/nearby">[nearby]</a> 
+          <a href="/stops">[all]</a> 
         </h3>
       </header>
     <% end %>
