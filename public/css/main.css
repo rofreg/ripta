@@ -54,8 +54,18 @@ header.secondary {
 }
 
 
+main, footer {
+  padding: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 main {
-  padding: 10px 15px;
+  padding: 25px 15px;
+}
+
+main h2:first-child{
+  margin-top: 0;
 }
 
 img {
@@ -111,5 +121,23 @@ td div.original_schedule{
 }
 
 td a {
+  color: #063753;
+}
+
+
+footer {
+  font-size: 14px;
+  text-align: center;
+  color: #777;
+  border-top: 1px solid #eee;
+  line-height: 26px;
+}
+
+footer img{
+  height: 20px;
+  vertical-align: -3px;
+}
+
+footer a {
   color: #063753;
 }

@@ -38,6 +38,14 @@
       <%= yield %>
     </main>
 
+    <footer>
+      Built by <img src="<%= image_path "splitwise.png" %>" title="Splitwise logo">
+      <a href="https://www.splitwise.com">Splitwise</a>
+      (<a href="https://twitter.com/rofreg">@rofreg</a> and <a href="https://twitter.com/jonbittner">@jonbittner</a>)
+      out of love for Rhode Island <img src="<%= image_path "ri.png" %>" title="Picture of Rhode Island"><br>
+      All data from RIPTA's <a href="http://realtime.ripta.com:81/">Realtime Transit API</a>
+    </footer>
+
     <!-- TODO: change UA-XXXXX-Y to a real Google Analytics ID. -->
     <script>
         window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
