@@ -46,6 +46,10 @@ class RiptaApp < Sinatra::Application
     "84HWWx3SMNpIO7e44kST24RMrC5074oHlfaZC8hy6pA.t5WkpflOT8aoWDx6YapIxwoo4T-0wM2UzilGpYCMmiU"
   end
 
+  get '/.well-known/acme-challenge/iLDQBUGV3HT7SumJwHGvvwGQK1vjKhMMENNIoQ77X2M' do
+    "iLDQBUGV3HT7SumJwHGvvwGQK1vjKhMMENNIoQ77X2M.t5WkpflOT8aoWDx6YapIxwoo4T-0wM2UzilGpYCMmiU"
+  end
+
   route :get, :post, ['/nearby', '/stops/:id/nearby'] do
     if params[:id]
       # find nearby stops based on stop id
