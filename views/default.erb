@@ -28,9 +28,10 @@
         <h3>
           <%= @stop.name %>
           <a href="/stops/<%= @stop.id %>/map">[map]</a>
-          <a href="/stops/<%= @stop.id %>/nearby">[nearby]</a> 
-          <a href="/stops">[all]</a> 
         </h3>
+        <a href="/stops/<%= @stop.id %>/nearby">View other nearby stops</a>
+        ::
+        <a href="/stops">View all stops</a>
       </header>
     <% end %>
 
