@@ -135,7 +135,12 @@ footer {
 
 footer img{
   height: 20px;
+  min-width: 16px;
   vertical-align: -3px;
+}
+
+footer img:first-child{
+  width: 20px;
 }
 
 footer a {
