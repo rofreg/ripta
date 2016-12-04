@@ -95,6 +95,7 @@ div#loading a{
 
 table {
   border-collapse: collapse;
+  width: 100%;
 }
 
 table td, table th{
