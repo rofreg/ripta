@@ -7,17 +7,40 @@
 
 <h2><%= @trip.route_id %> to <%= @trip.headsign %></h2>
 
-
-
 <% @shape = @trip.shapes.ordered %>
 
 <% @stops = @trip.stops %>
+
+<% @stop_times = @trip.stop_times
+
+	colors = []
+	
+	@stop_times.each do |st|
+	 if st.departure_time > Time.now
+	 	colors.push "red"
+	 else
+	 	colors.push "grey"
+	 end
+	end
+
+%>
+
+<% destination_stop = GTFS::Realtime::Stop.find(@stop_times.last.stop_id) %>
 
 <div id="mapid"></div>
 
 <script>
 	var busIcon = L.icon({
 	    iconUrl: '/images/bus_marker_small.png',
+	    
+
+	    iconSize:     [50, 71], // size of the icon
+	    iconAnchor:   [24, 71], // point of the icon which will correspond to marker's location
+	    popupAnchor:  [24, 100]	 // point from which the popup should open relative to the iconAnchor
+	});
+
+	var destIcon = L.icon({
+	    iconUrl: '/images/dest_marker_small.png',
 	    
 
 	    iconSize:     [50, 71], // size of the icon
@@ -46,18 +69,33 @@
 	<% @stops.each do |s| %>
 		stops.push (L.latLng(<%= s.latitude %>, <%= s.longitude %>))
 	<% end %>
+	
+	colors = []
+
+	<% colors.each do |c| %>
+		colors.push("<%= c %>")
+	<% end %>
+
+
+	var polyline = L.polyline(path, {color: 'red'}).addTo(mymap);
+
+	//L.marker([<%= destination_stop.latitude %>, <%= destination_stop.longitude %>]).addTo(mymap);
+	//L.marker([<%= destination_stop.latitude %>, <%= destination_stop.longitude %>], title:'Destination', {noHide: true}).addTo(mymap);
+	//var popup = L.popup().setLatLng([<%= destination_stop.latitude %>, <%= destination_stop.longitude %>]).setContent("Destination").openOn(mymap)
+	var marker = L.marker([<%= destination_stop.latitude %>, <%= destination_stop.longitude %>], {icon: destIcon}).addTo(mymap);
 
 	for (i = 0; i < stops.length; i++) {
 		//var marker = L.marker(stops[i]).addTo(mymap);
+		mycolor = colors[i];
+
 		var circle = L.circle(stops[i], {
-    		color: 'red',
+    		color: mycolor,
     		fillColor: '#f03',
     		fillOpacity: 0.7,
     		radius: 80
 		}).addTo(mymap);
 	}
 
-	var polyline = L.polyline(path, {color: 'red'}).addTo(mymap);
 	mymap.fitBounds(path);
 	mymap.setZoomAround(mymap.getCenter(), mymap.getZoom());
 
