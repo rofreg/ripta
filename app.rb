@@ -17,7 +17,7 @@ Thread.new do
 end
 
 class RiptaApp < Sinatra::Application
-  use Rack::SSL if Sinatra::Base.production?
+  # use Rack::SSL if Sinatra::Base.production?
   use Rollbar::Middleware::Sinatra
   register Sinatra::MultiRoute
 
