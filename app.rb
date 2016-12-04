@@ -41,6 +41,11 @@ class RiptaApp < Sinatra::Application
     erb :get_location, layout: :default
   end
 
+  # let's encrypt ownership check
+  get '/.well-known/acme-challenge/84HWWx3SMNpIO7e44kST24RMrC5074oHlfaZC8hy6pA' do
+    "84HWWx3SMNpIO7e44kST24RMrC5074oHlfaZC8hy6pA.t5WkpflOT8aoWDx6YapIxwoo4T-0wM2UzilGpYCMmiU"
+  end
+
   route :get, :post, ['/nearby', '/stops/:id/nearby'] do
     if params[:id]
       # find nearby stops based on stop id
