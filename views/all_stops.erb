@@ -1,3 +1,19 @@
+<% if @geolocation == "false" %>
+  <p>
+    Sorry, we couldn't automatically detect your location. Please pick a stop from the list below.
+  </p>
+<% end %>
+
+<input type="text" id="search" placeholder="Search..." oninput="filter()">
+
+<ul id="stops">
+  <% @stops.sort_by(&:name).each do |stop| %>
+    <li data-name="<%= stop.name.downcase %>">
+      <a href="/stops/<%= stop.id %>"><%= stop.name %></a>
+    </li>
+  <% end %>
+</ul>
+
 <script>
   function filter(){
     document.querySelector("ul#stops").className = "hidden";
@@ -15,21 +31,3 @@
     document.querySelector("ul#stops").className = "";
   }
 </script>
-
-
-
-<% if @geolocation == "false" %>
-  <p>
-    Sorry, we couldn't automatically detect your location. Please pick a stop from the list below.
-  </p>
-<% end %>
-
-<input type="text" id="search" placeholder="Search..." oninput="filter()">
-
-<ul id="stops">
-  <% @stops.sort_by(&:name).each do |stop| %>
-    <li data-name="<%= stop.name.downcase %>">
-      <a href="/stops/<%= stop.id %>"><%= stop.name %></a>
-    </li>
-  <% end %>
-</ul>

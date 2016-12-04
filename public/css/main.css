@@ -4,11 +4,16 @@
 */
 
 header {
-  width: 100%;
+  padding: 5px 10px;
   text-align: center;
   background: #eee;
   border-bottom: 1px solid #ddd;
   color: #063753;
+}
+
+header.secondary {
+  background: #063753;
+  color: #fff;
 }
 
 header h1, h3{
@@ -18,7 +23,6 @@ header h1, h3{
 header h1{
   font-size: 22px;
   font-weight: bold;
-  padding: 8px 10px 4px;
 }
 
 header h1 a{
@@ -27,12 +31,16 @@ header h1 a{
 }
 
 header h3{
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  padding: 5px 10px 4px;
 }
 
-header h3 a{
+header.secondary{
+  padding: 5px 10px;
+  line-height: 20px;
+}
+
+header.secondary a{
   color: #70aab3;
   font-size: 16px;
   font-weight: normal;
@@ -42,15 +50,6 @@ header img{
   height: 18px;
   width: 60px;
   vertical-align: -1px;
-}
-
-header.secondary {
-  width: 100%;
-  text-align: center;
-  background: #eee;
-  border-bottom: 1px solid #ddd;
-  background: #063753;
-  color: #fff;
 }
 
 
@@ -64,7 +63,7 @@ main {
   padding: 25px 15px;
 }
 
-main h2:first-child{
+main h2:first-child, main p:first-child{
   margin-top: 0;
 }
 
