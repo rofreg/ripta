@@ -1,19 +1,13 @@
+<h2>Route <%= @trip.route_id %> to <%= @trip.headsign %></h2>
+<h4>Expected arrival at <%= @trip.stop_times.last.arrival_time.strftime("%l:%M%P") %></h4>
+<div id="map"></div>
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
 
-<style>
-#mapid { height: 400px; width: 100% }
-</style>
-
+<%# TODO: fix colors %>
 <% colors = @trip.stop_times.collect{|st| st.departure_time > Time.now ? "red" : "red"} %>
 <% destination_stop = @trip.stop_times.last.stop %>
-
-<h2>Route <%= @trip.route_id %> to <%= @trip.headsign %></h2>
-<h4>Expected arrival at <%= @trip.stop_times.last.arrival_time.strftime("%l:%M%P") %></h4>
-<div id="mapid"></div>
-
-<%# TODO: fix colors %>
-
 
 <script>
   var busIcon = L.icon({
@@ -30,7 +24,7 @@
     popupAnchor:  [24, 100]  // point from which the popup should open relative to the iconAnchor
   });
 
-  var mymap = new L.Map('mapid');
+  var mymap = new L.Map('map');
 
   var osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';

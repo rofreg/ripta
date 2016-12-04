@@ -124,6 +124,11 @@ td a {
   color: #063753;
 }
 
+#map {
+  height: 400px;
+  width: 100%;
+}
+
 
 footer {
   font-size: 14px;
