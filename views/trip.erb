@@ -9,12 +9,23 @@
 
 <div id="mapid"></div>
 
+<%# TODO: fix colors %>
+<% colors = @trip.stop_times.collect{|st| st.departure_time > Time.now ? "red" : "red"} %>
+<% destination_stop = @trip.stop_times.last.stop %>
+
 <script>
   var busIcon = L.icon({
-      iconUrl: '/images/bus_marker_small.png',
-      iconSize:     [50, 71], // size of the icon
-      iconAnchor:   [24, 71], // point of the icon which will correspond to marker's location
-      popupAnchor:  [24, 100]  // point from which the popup should open relative to the iconAnchor
+    iconUrl: '/images/bus_marker_small.png',
+    iconSize:     [50, 71], // size of the icon
+    iconAnchor:   [24, 71], // point of the icon which will correspond to marker's location
+    popupAnchor:  [24, 100]  // point from which the popup should open relative to the iconAnchor
+  });
+
+  var destIcon = L.icon({
+    iconUrl: '/images/dest_marker_small.png',
+    iconSize:     [50, 71], // size of the icon
+    iconAnchor:   [24, 71], // point of the icon which will correspond to marker's location
+    popupAnchor:  [24, 100]  // point from which the popup should open relative to the iconAnchor
   });
 
   var mymap = new L.Map('mapid');
@@ -26,24 +37,30 @@
   mymap.setView(new L.LatLng(41.825017, -71.411064), 9);
   mymap.addLayer(osm);
 
-  <% if @vehicle_position %>
-    var marker = L.marker([<%= @vehicle_position.latitude %>, <%= @vehicle_position.longitude %>], {icon: busIcon}).addTo(mymap);
-  <% end %>
-
-  <% @trip.stops.each do |s| %>
-    L.circle(L.latLng(<%= s.latitude %>, <%= s.longitude %>), {
-      color: 'red',
-      fillColor: '#f03',
-      fillOpacity: 0.7,
-      radius: 80
-    }).addTo(mymap);
-  <% end %>
-
+  // Draw our route line
   var path = [];
   <% @trip.shapes.ordered.each do |s| %>
     path.push (L.latLng(<%= s.latitude %>, <%= s.longitude %>));
   <% end %>
   var polyline = L.polyline(path, {color: 'red'}).addTo(mymap);
+
+  <% if @vehicle_position %>
+    // Draw the vehicle position
+    var marker = L.marker([<%= @vehicle_position.latitude %>, <%= @vehicle_position.longitude %>], {icon: busIcon}).addTo(mymap);
+  <% end %>
+
+  // Draw the destination
+  var marker = L.marker([<%= destination_stop.latitude %>, <%= destination_stop.longitude %>], {icon: destIcon}).addTo(mymap);
+
+  // Draw the stops
+  <% @trip.stops.each_with_index do |s, index| %>
+    L.circle(L.latLng(<%= s.latitude %>, <%= s.longitude %>), {
+      color: "<%= colors[index] %>",
+      fillColor: '#f03',
+      fillOpacity: 0.7,
+      radius: 80
+    }).addTo(mymap);
+  <% end %>
 
   mymap.fitBounds(path);
   mymap.setZoomAround(mymap.getCenter(), mymap.getZoom());
