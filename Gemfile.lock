@@ -56,8 +56,7 @@ GEM
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
-    rack-ssl (1.4.1)
-      rack
+    rack-ssl-enforcer (0.2.9)
     rack-test (0.6.3)
       rack (>= 1.0)
     rake (11.3.0)
@@ -105,7 +104,7 @@ DEPENDENCIES
   gtfs-realtime!
   json
   mysql2
-  rack-ssl
+  rack-ssl-enforcer
   rerun
   rollbar
   sinatra

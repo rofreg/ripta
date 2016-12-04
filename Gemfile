@@ -20,5 +20,5 @@ end
 
 group :production do
   gem 'mysql2'
-  gem 'rack-ssl'
+  gem 'rack-ssl-enforcer'
 end
