@@ -5,13 +5,15 @@
 #mapid { height: 400px; width: 100% }
 </style>
 
-<h2><%= @trip.route_id %> to <%= @trip.headsign %></h2>
+<% colors = @trip.stop_times.collect{|st| st.departure_time > Time.now ? "red" : "red"} %>
+<% destination_stop = @trip.stop_times.last.stop %>
 
+<h2>Route <%= @trip.route_id %> to <%= @trip.headsign %></h2>
+<h4>Expected arrival at <%= @trip.stop_times.last.arrival_time.strftime("%l:%M%P") %></h4>
 <div id="mapid"></div>
 
 <%# TODO: fix colors %>
-<% colors = @trip.stop_times.collect{|st| st.departure_time > Time.now ? "red" : "red"} %>
-<% destination_stop = @trip.stop_times.last.stop %>
+
 
 <script>
   var busIcon = L.icon({
