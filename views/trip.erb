@@ -1,12 +1,53 @@
 <h2>Route <%= @trip.route_id %> to <%= @trip.headsign %></h2>
-<h4>Expected arrival at <%= @trip.stop_times.last.arrival_time.strftime("%l:%M%P") %></h4>
+<% if @delay %>
+  <h4>
+    <% if @delay > 0 %>
+      Delayed by <%= @delay / 60 %> minutes
+    <% elsif @delay < 0 %>
+      <%= @delay.abs / 60 %> minutes ahead of schedule
+    <% else %>
+      On time
+    <% end %>
+  </h4>
+<% end %>
 <div id="map"></div>
+
+<% if @stop_time_updates&.any? %>
+  <h2>Upcoming stops</h2>
+  <table>
+    <tr>
+      <th>ETA</th>
+      <th>Stop</th>
+    </tr>
+    <% @stop_time_updates.each do |stop_time| %>
+      <% time = stop_time.arrival_time || stop_time.departure_time %>
+      <tr class="live">
+        <td class="time">
+          <% if time - Time.now <= -60 %>
+            Departed
+          <% elsif time - Time.now <= 30 %>
+            Arriving now
+          <% elsif time - Time.now <= 90 %>
+            1 minute away
+          <% elsif time - Time.now <= 600 %>
+            <%= ((time - Time.now) / 60).round %> minutes away
+          <% else %>
+            <%= time.strftime("%l:%M%P") %>
+          <% end %>
+        </td>
+        <td>
+          <a href="/stops/<%= stop_time.stop_id %>"><%= stop_time.stop.name %></a>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
 
 <%# TODO: fix colors %>
-<% colors = @trip.stop_times.collect{|st| st.departure_time > Time.now ? "red" : "red"} %>
+<% colors = @trip.stop_times.collect{|st| @stop_time_updates&.find{|stu| stu.stop_id == st.stop_id} ? "#f00" : "#f00"} %>
 <% destination_stop = @trip.stop_times.last.stop %>
 
 <script>
@@ -38,7 +79,7 @@
   <% @trip.shapes.ordered.each do |s| %>
     path.push (L.latLng(<%= s.latitude %>, <%= s.longitude %>));
   <% end %>
-  var polyline = L.polyline(path, {color: 'red'}).addTo(mymap);
+  var polyline = L.polyline(path, {color: '#f00'}).addTo(mymap);
 
   <% if @vehicle_position %>
     // Draw the vehicle position
@@ -50,11 +91,11 @@
 
   // Draw the stops
   <% @trip.stops.each_with_index do |s, index| %>
-    L.circle(L.latLng(<%= s.latitude %>, <%= s.longitude %>), {
-      color: "<%= colors[index] %>",
-      fillColor: '#f03',
+    L.circleMarker(L.latLng(<%= s.latitude %>, <%= s.longitude %>), {
+      color: <%= colors[index].to_json %>,
+      fillColor: <%= colors[index].to_json %>,
       fillOpacity: 0.7,
-      radius: 80
+      radius: 4
     }).addTo(mymap);
   <% end %>
 

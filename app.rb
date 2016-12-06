@@ -98,8 +98,21 @@ class RiptaApp < Sinatra::Application
       scheduled_time > Time.now - 120 || (actual_time && actual_time > Time.now - 120)
     end
 
-    # TODO: update gem to handle case where bus arrives + leaves early
-    # right now, the bus re-appears on the schedule at that point :|
+    # TEMPORARY FIX: handle the case where a bus arrives + leaves early
+    # after the bus leaves + before its scheduled time, it (wrongly) appears to be on-time.
+    # as of 2016-12-04, RIPTA appears to project for all upcoming stops in the next 30 minutes.
+    # so a quick-fix, let's hide any scheduled stops in the next 25 minutes without a live update,
+    # excluding the routes that don't have any live updates at all.
+    # this generally works, but it still has a few corner cases, esp. at terminal stops.
+    # e.g. a bus from TF Green may look like it has departed when it actually hasn't
+
+    @stop_times = @stop_times.select do |stop_time|
+      result = false
+      result = true if stop_time.live?
+      result = true if (stop_time.scheduled_departure_time || stop_time.scheduled_arrival_time) > Time.now + 25*60
+      result = true if GTFS::Realtime::TripUpdate.where(trip_id: stop_time.trip_id).none?
+      result
+    end
 
     # refresh the page every 30 seconds
     @refresh_interval = 30
@@ -115,6 +128,9 @@ class RiptaApp < Sinatra::Application
   get '/trips/:id' do
     @trip = GTFS::Realtime::Trip.find(params[:id])
     @vehicle_position = GTFS::Realtime::VehiclePosition.where(trip_id: @trip.id).first
+    @trip_update = GTFS::Realtime::TripUpdate.where(trip_id: @trip.id).first
+    @stop_time_updates = GTFS::Realtime::StopTimeUpdate.where(trip_update_id: @trip_update.id) if @trip_update
+    @delay = (@stop_time_updates.first.arrival_delay || @stop_time_updates.first.departure_delay) if @stop_time_updates.any?
 
     erb :trip, layout: :default
   end
