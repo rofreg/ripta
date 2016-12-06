@@ -130,7 +130,7 @@ class RiptaApp < Sinatra::Application
     @vehicle_position = GTFS::Realtime::VehiclePosition.where(trip_id: @trip.id).first
     @trip_update = GTFS::Realtime::TripUpdate.where(trip_id: @trip.id).first
     @stop_time_updates = GTFS::Realtime::StopTimeUpdate.where(trip_update_id: @trip_update.id) if @trip_update
-    @delay = (@stop_time_updates.first.arrival_delay || @stop_time_updates.first.departure_delay) if @stop_time_updates.any?
+    @delay = (@stop_time_updates.first.arrival_delay || @stop_time_updates.first.departure_delay) if @stop_time_updates&.any?
 
     erb :trip, layout: :default
   end
