@@ -4,7 +4,7 @@
   </p>
 <% end %>
 
-<input type="text" id="search" placeholder="Search..." oninput="filter()">
+<input type="text" id="search" placeholder="Search for a stop..." oninput="filter()">
 
 <ul id="stops">
   <% @stops.sort_by(&:name).each do |stop| %>
@@ -19,15 +19,25 @@
     document.querySelector("ul#stops").className = "hidden";
 
     var all_lis = document.querySelectorAll("li[data-name]");
-    for (index in all_lis){
-      var li = all_lis[index];
-      var match = false;
-      try {
-        var match = (li.dataset.name.search(new RegExp(document.getElementById('search').value, "i")) != -1);
-      } catch(e) {}
-      li.className = (match ? "" : "hidden");
+    var search = document.getElementById('search').value;
+    var searchRegex = new RegExp(search, "i");
+
+    if (search == ""){
+      all_lis.forEach(function(li){
+        li.className = "";
+      })
+    } else {
+      all_lis.forEach(function(li){
+        var match = (li.dataset.name.search(searchRegex) != -1);
+        li.className = (match ? "" : "hidden");
+      })
     }
 
     document.querySelector("ul#stops").className = "";
+  }
+
+  // Handle the back button in Chrome
+  if (document.getElementById('search').value != ""){
+    filter();
   }
 </script>
