@@ -13,6 +13,7 @@ gem 'dotenv'
 gem 'json'
 gem 'gtfs-realtime', git: 'https://github.com/rofreg/gtfs-realtime.git', branch: 'master'
 gem 'rollbar'
+gem 'newrelic_rpm'
 
 group :development do
   gem 'sqlite3'

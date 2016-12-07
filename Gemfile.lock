@@ -48,6 +48,7 @@ GEM
     minitest (5.10.1)
     multi_json (1.12.1)
     mysql2 (0.4.5)
+    newrelic_rpm (3.17.1.326)
     protobuf (3.6.12)
       activesupport (>= 3.2)
       middleware
@@ -104,6 +105,7 @@ DEPENDENCIES
   gtfs-realtime!
   json
   mysql2
+  newrelic_rpm
   rack-ssl-enforcer
   rerun
   rollbar
