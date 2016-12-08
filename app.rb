@@ -80,7 +80,8 @@ class RiptaApp < Sinatra::Application
   end
 
   get '/stops' do
-    @stops = GTFS::Realtime::Stop.all
+    # optimize loading all stops by loading them as hashes
+    @stops = GTFS::Realtime::Stop.connection.select_all("SELECT id, name FROM gtfs_realtime_stops").sort_by{|s| s["name"]}
     @geolocation = params["geolocation"]
 
     erb :all_stops, layout: :default
@@ -107,11 +108,10 @@ class RiptaApp < Sinatra::Application
     # e.g. a bus from TF Green may look like it has departed when it actually hasn't
 
     @stop_times = @stop_times.select do |stop_time|
-      result = false
-      result = true if stop_time.live?
-      result = true if (stop_time.scheduled_departure_time || stop_time.scheduled_arrival_time) > Time.now + 25*60
-      result = true if GTFS::Realtime::TripUpdate.where(trip_id: stop_time.trip_id).none?
-      result
+      should_show_stop_time = stop_time.live?
+      should_show_stop_time ||= (stop_time.scheduled_departure_time || stop_time.scheduled_arrival_time) > Time.now + 25*60
+      should_show_stop_time ||= GTFS::Realtime::TripUpdate.where(trip_id: stop_time.trip_id).none?
+      should_show_stop_time
     end
 
     # refresh the page every 30 seconds

@@ -7,9 +7,9 @@
 <input type="text" id="search" placeholder="Search for a stop..." oninput="filter()">
 
 <ul id="stops">
-  <% @stops.sort_by(&:name).each do |stop| %>
-    <li data-name="<%= stop.name.downcase %>">
-      <a href="/stops/<%= stop.id %>"><%= stop.name %></a>
+  <% @stops.each do |stop| %>
+    <li data-name="<%= stop["name"] %>">
+      <a href="/stops/<%= stop["id"] %>"><%= stop["name"] %></a>
     </li>
   <% end %>
 </ul>
