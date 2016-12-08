@@ -17,9 +17,8 @@ Thread.new do
 end
 
 class RiptaApp < Sinatra::Application
-  # force SSL for domains that don't start with 'w'
-  # exclude the Let's Encrypt ownership check URLs
-  use Rack::SslEnforcer, only_hosts: /^[^w]/, except: /^\/.well-known/ if Sinatra::Base.production?
+  # force SSL, but exclude the Let's Encrypt ownership check URLs
+  use Rack::SslEnforcer, except: /^\/.well-known/ if Sinatra::Base.production?
 
   use Rollbar::Middleware::Sinatra
   register Sinatra::MultiRoute
