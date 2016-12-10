@@ -8,7 +8,7 @@ Thread.new do
     begin
       sleep 10
       GTFS::Realtime.refresh_realtime_feed!
-    rescue StandardError => e
+    rescue StandardError, Net::OpenTimeout => e
       # keep trying, even in the event of an error
       # but let us know about the issue
       Rollbar.error(e)
