@@ -16,6 +16,20 @@ Thread.new do
   end
 end
 
+# Refresh GTFS Static data every 24 hours, between 3am and 4am
+Thread.new do
+  loop do
+    begin
+      sleep 60*60 # check every hour
+      GTFS::Realtime.load_static_feed!(force: true) if Time.now.hour == 3
+    rescue StandardError, Net::OpenTimeout => e
+      # keep trying, even in the event of an error
+      # but let us know about the issue
+      Rollbar.error(e)
+    end
+  end
+end
+
 class RiptaApp < Sinatra::Application
   # force SSL, but exclude the Let's Encrypt ownership check URLs
   use Rack::SslEnforcer, except: /^\/.well-known/ if Sinatra::Base.production?
