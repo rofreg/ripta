@@ -35,6 +35,19 @@
       </header>
     <% end %>
 
+    <% if Time.now < Date.parse("2017-06-18") %>
+      <div style="margin: 20px; padding: 10px; border: 4px solid #c00">
+        <strong>Live RIPTA data is currently not working.</strong>
+        The calendar of bus schedules returned by the official RIPTA API does not
+        currently include any schedules for June 13-17. As a result, bus schedules
+        may not appear properly on ripta.info.<br>
+        <br>
+        As a backup solution, we recommend using
+        <a href="https://maps.google.com">Google Maps</a> (which has started to
+        include some live transit info!)
+      </div>
+    <% end %>
+
     <main>
       <%= yield %>
     </main>
@@ -50,7 +63,6 @@
       <a href="mailto:riptadotinfo@gmail.com">Report an issue</a> | <a href="mailto:riptadotinfo@gmail.com">Feedback</a>
     </footer>
 
-    
     <script>
         window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
         ga('create','UA-88368284-1','auto');ga('send','pageview')
