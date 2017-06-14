@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rofreg/gtfs-realtime.git
-  revision: e4075aa9abc189b93e62639d30802c93dbda10f4
+  revision: bd0bcbcd3890adf93d7c687bbc6d61f7e1d4abee
   branch: master
   specs:
     gtfs-realtime (0.4.0)
