@@ -23,7 +23,9 @@
       <% time = stop_time.arrival_time || stop_time.departure_time %>
       <tr class="live">
         <td class="time">
-          <% if time - Time.now <= -60 %>
+          <% if time.nil? %>
+            Unavailable
+          <% elsif time - Time.now <= -60 %>
             Departed
           <% elsif time - Time.now <= 30 %>
             Arriving now
