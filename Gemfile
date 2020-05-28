@@ -12,7 +12,6 @@ gem 'rerun'
 gem 'dotenv'
 gem 'json'
 gem 'gtfs-realtime', git: 'https://github.com/rofreg/gtfs-realtime.git', branch: 'master'
-gem 'activerecord', '~> 5.1'
 gem 'rollbar'
 gem 'newrelic_rpm'
 
