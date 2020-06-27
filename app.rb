@@ -35,7 +35,6 @@ class RiptaApp < Sinatra::Application
   use Rack::SslEnforcer, except: /^\/.well-known/ if Sinatra::Base.production?
 
   use Rollbar::Middleware::Sinatra
-  register Sinatra::MultiRoute
 
   configure do
     # use Sprockets for cache-busting assets in the 'public' folder
@@ -66,30 +65,57 @@ class RiptaApp < Sinatra::Application
     "iLDQBUGV3HT7SumJwHGvvwGQK1vjKhMMENNIoQ77X2M.t5WkpflOT8aoWDx6YapIxwoo4T-0wM2UzilGpYCMmiU"
   end
 
-  route :get, :post, ['/nearby', '/stops/:id/nearby'] do
-    if params[:id]
-      # find nearby stops based on stop id
-      @stop = GTFS::Realtime::Stop.find(params[:id])
-      latitude, longitude = @stop.latitude, @stop.longitude
-    elsif params[:latitude]
-      # find nearby stops based on submitted location
-      latitude, longitude = params[:latitude].to_f, params[:longitude].to_f
-      autodetect_stop = true
-    else
-      redirect to("/")
+  ['/nearby', '/stops/:id/nearby'].each do |nearby_path|
+    get nearby_path do
+      if params[:id]
+        # find nearby stops based on stop id
+        @stop = GTFS::Realtime::Stop.find(params[:id])
+        latitude, longitude = @stop.latitude, @stop.longitude
+      elsif params[:latitude]
+        # find nearby stops based on submitted location
+        latitude, longitude = params[:latitude].to_f, params[:longitude].to_f
+        autodetect_stop = true
+      else
+        redirect to("/")
+      end
+
+      @stops = GTFS::Realtime::Stop.nearby(latitude, longitude)
+
+      # find VERY nearby stops
+      @close_stops = @stops.select{|s| s.distance(latitude, longitude) < 0.002}.sort_by{|s| s.distance(latitude, longitude)}
+
+      # if the closest stop is RIGHT nearby, auto-choose it
+      if autodetect_stop && @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0001
+        redirect to("/stops/#{@close_stops.first.id}")
+      end
+
+      erb :pick_stop, layout: :default
     end
+    post nearby_path do
+      if params[:id]
+        # find nearby stops based on stop id
+        @stop = GTFS::Realtime::Stop.find(params[:id])
+        latitude, longitude = @stop.latitude, @stop.longitude
+      elsif params[:latitude]
+        # find nearby stops based on submitted location
+        latitude, longitude = params[:latitude].to_f, params[:longitude].to_f
+        autodetect_stop = true
+      else
+        redirect to("/")
+      end
 
-    @stops = GTFS::Realtime::Stop.nearby(latitude, longitude)
+      @stops = GTFS::Realtime::Stop.nearby(latitude, longitude)
 
-    # find VERY nearby stops
-    @close_stops = @stops.select{|s| s.distance(latitude, longitude) < 0.002}.sort_by{|s| s.distance(latitude, longitude)}
+      # find VERY nearby stops
+      @close_stops = @stops.select{|s| s.distance(latitude, longitude) < 0.002}.sort_by{|s| s.distance(latitude, longitude)}
 
-    # if the closest stop is RIGHT nearby, auto-choose it
-    if autodetect_stop && @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0001
-      redirect to("/stops/#{@close_stops.first.id}")
+      # if the closest stop is RIGHT nearby, auto-choose it
+      if autodetect_stop && @close_stops.first && @close_stops.first.distance(latitude, longitude) < 0.0001
+        redirect to("/stops/#{@close_stops.first.id}")
+      end
+
+      erb :pick_stop, layout: :default
     end
-
-    erb :pick_stop, layout: :default
   end
 
   get '/stops' do
