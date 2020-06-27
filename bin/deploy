@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Heroku requires you to push to `master` branch to deploy
+# However, this project uses `main` as its primary branch
+git push heroku main:master
