@@ -2,7 +2,7 @@ require 'dotenv'
 Dotenv.load
 
 GTFS::Realtime.configure do |config|
-  config.static_feed = "https://www.ripta.com/stuff/contentmgr/files/0/3cda81dfa140edbe9aae214b26245b4a/files/google_transit.zip"
+  config.static_feed = "https://www.ripta.com/wp-content/uploads/2022/04/google_transit.zip"
   config.trip_updates_feed = "http://realtime.ripta.com:81/api/tripupdates"
   config.vehicle_positions_feed = "http://realtime.ripta.com:81/api/vehiclepositions"
   config.service_alerts_feed = "http://realtime.ripta.com:81/api/servicealerts"
