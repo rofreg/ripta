@@ -11,3 +11,4 @@ database.db
 database.db-journal
 .env
 .bundle/config
+/log/*

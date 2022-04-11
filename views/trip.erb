@@ -38,7 +38,7 @@
           <% end %>
         </td>
         <td>
-          <a href="/stops/<%= stop_time.stop_id %>"><%= stop_time.stop.name %></a>
+          <a href="/stops/<%= stop_time.stop_id %>"><%= stop_time.stop&.name || '[Stop name unknown]' %></a>
         </td>
       </tr>
     <% end %>
