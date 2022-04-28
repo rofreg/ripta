@@ -25,6 +25,11 @@ common: &default_settings
   # don't count asset requests as NewRelic requests
   rules.ignore_url_regexes: ["^/css", "^/images"]
 
+  # See: https://docs.newrelic.com/docs/apm/agents/ruby-agent/configuration/ruby-agent-configuration/#application_logging-enabled
+  # We do not want NewRelic to collect our logs.
+  application_logging:
+    enabled: false
+
 
 # Environment-specific settings are in this section.
 # RAILS_ENV or RACK_ENV (as appropriate) is used to determine the environment.
